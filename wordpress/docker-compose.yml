@@ -1,0 +1,61 @@
+version: '3.9'
+
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+  mariadb:
+    name: mariadb
+    driver: local
+
+networks:
+  web:
+    name: web
+    driver: bridge
+
+services:
+  wordpress:
+    image: wordpress:5.8.3-php7.4-apache
+    container_name: wordpress
+    restart: unless-stopped
+    networks:
+      web:
+    volumes:
+    - wordpress:/var/www/html
+    environment:
+    - WORDPRESS_DB_HOST 
+    - WORDPRESS_DB_USER
+    - WORDPRESS_DB_PASSWORD
+    - WORDPRESS_DB_NAME
+    - WORDPRESS_TABLE_PREFIX
+    depends_on:
+    - mariadb
+    labels:
+    # Expose to Traefik.
+    - traefik.enable=true
+
+    # Configure HTTP endpoint, redirect to HTTPS.
+    - traefik.http.routers.wordpress.entrypoints=http
+    - traefik.http.routers.wordpress.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    - traefik.http.routers.wordpress.middlewares=traefik-https
+    - traefik.http.middlewares.wordpress-https.redirectscheme.scheme=https
+
+    # Configure HTTPS endpoint.
+    - traefik.http.routers.wordpress-https.entrypoints=https
+    - traefik.http.routers.wordpress-https.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    - traefik.http.routers.wordpress-https.tls=true
+    - traefik.http.routers.wordpress-https.tls.certResolver=cloudflare
+
+  mariadb:
+    image: mariadb:10.7.1-focal
+    container_name: mariadb
+    restart: unless-stopped
+    networks:
+      web:
+    volumes:
+    - mariadb:/var/lib/mysql
+    environment:
+    - MARIADB_ROOT_PASSWORD
+    - MARIADB_DATABASE
+    - MARIADB_USER
+    - MARIADB_PASSWORD
