@@ -2,8 +2,7 @@ version: '3.9'
 
 networks:
   web:
-    name: web
-    driver: bridge
+    external: true
 
 services:
   traefik:
