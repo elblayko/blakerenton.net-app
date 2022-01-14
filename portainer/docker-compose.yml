@@ -1,0 +1,43 @@
+version: '3.9'
+
+networks:
+  web:
+    name: web
+    driver: bridge
+
+volumes:
+  portainer_data:
+    driver: local
+
+services:
+  portainer:
+    image: portainer/portainer-ce:2.11.0-alpine
+
+    container_name: portainer
+    
+    networks:
+      web:
+    
+    restart: unless-stopped
+ 
+    volumes:
+    - portainer_data:/data
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    labels:
+    - traefik.enable=true
+    
+    # HTTP Endpoint
+    - traefik.http.routers.portainer.entrypoints=http
+    - traefik.http.routers.portainer.rule=Host(`portainer.blakerenton.net`)
+    - traefik.http.routers.portainer.middlewares=portainer-https
+    - traefik.http.middlewares.portainer-https.redirectscheme.scheme=https
+
+    # Configure HTTPS endpoint.
+    - traefik.http.routers.portainer-https.entrypoints=https
+    - traefik.http.routers.portainer-https.rule=Host(`portainer.blakerenton.net`)
+    - traefik.http.routers.portainer-https.tls=true
+    - traefik.http.routers.portainer-https.tls.certResolver=cloudflare
+    - traefik.http.routers.portainer-https.service=portainer-https@docker
+    - traefik.http.services.portainer-https.loadbalancer.server.port=9000
+    
