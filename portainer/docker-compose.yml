@@ -11,21 +11,16 @@ volumes:
 services:
   portainer:
     image: portainer/portainer-ce:2.11.0-alpine
-
     container_name: portainer
-    
     networks:
       web:
-    
     restart: unless-stopped
- 
     volumes:
     - portainer_data:/data
     - /var/run/docker.sock:/var/run/docker.sock:ro
-
     labels:
     - traefik.enable=true
-    
+
     # HTTP Endpoint
     - traefik.http.routers.portainer.entrypoints=http
     - traefik.http.routers.portainer.rule=Host(`portainer.blakerenton.net`)
