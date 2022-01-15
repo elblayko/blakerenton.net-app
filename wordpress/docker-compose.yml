@@ -29,12 +29,6 @@ services:
     - WORDPRESS_TABLE_PREFIX
     depends_on:
     - mariadb
-    healthcheck:
-      test: ["CMD", "curl -f http://localhost/"]
-      interval: 1m
-      timeout: 30s
-      retries: 5
-      start_period: 30s
     labels:
     # Expose to Traefik.
     - traefik.enable=true
@@ -59,12 +53,6 @@ services:
       web:
     volumes:
     - mariadb:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin ping --silent"] 
-      interval: 1m
-      timeout: 30s
-      retries: 5
-      start_period: 0s
     environment:
     - MARIADB_ROOT_PASSWORD
     - MARIADB_DATABASE

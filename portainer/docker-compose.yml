@@ -18,12 +18,6 @@ services:
     volumes:
     - portainer_data:/data
     - /var/run/docker.sock:/var/run/docker.sock:ro
-    healthcheck:
-      test: ["CMD", "wget --spider --no-check-certificate http://localhost:9000"]
-      interval: 1m
-      timeout: 30s
-      retries: 5
-      start_period: 0s
     labels:
     - traefik.enable=true
 
