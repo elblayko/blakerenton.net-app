@@ -35,13 +35,13 @@ services:
 
     # Configure HTTP endpoint, redirect to HTTPS.
     - traefik.http.routers.wordpress.entrypoints=http
-    - traefik.http.routers.wordpress.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    - traefik.http.routers.wordpress.rule=Host(`blog.blakerenton.net`) || Host(`blakerenton.net`)
     - traefik.http.routers.wordpress.middlewares=traefik-https
     - traefik.http.middlewares.wordpress-https.redirectscheme.scheme=https
 
     # Configure HTTPS endpoint.
     - traefik.http.routers.wordpress-https.entrypoints=https
-    - traefik.http.routers.wordpress-https.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    - traefik.http.routers.wordpress-https.rule=Host(`blog.blakerenton.net`) || Host(`blakerenton.net`)
     - traefik.http.routers.wordpress-https.tls=true
     - traefik.http.routers.wordpress-https.tls.certResolver=cloudflare
 

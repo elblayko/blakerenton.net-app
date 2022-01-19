@@ -1,0 +1,53 @@
+version: "3.9"
+
+networks:
+  web:
+    external: true
+
+services:
+  littlelink:
+    image: ghcr.io/techno-tim/littlelink-server:latest
+    container_name: littlelink
+    environment:
+      - META_TITLE=Blake Renton
+      - META_DESCRIPTION=Blake Renton Link page
+      - META_AUTHOR=Blake Renton
+      - LANG=en
+      - META_INDEX_STATUS=all
+      - THEME=Dark
+      - FAVICON_URL=https://avatars.githubusercontent.com/u/1448357?s=40&v=4
+      - AVATAR_URL=https://avatars.githubusercontent.com/u/1448357?s=40&v=4
+      - AVATAR_2X_URL=https://avatars.githubusercontent.com/u/1448357?v=4
+      - AVATAR_ALT=Blake Renton Profile Picture
+      - NAME=Blake Renton
+      - BIO=Hey! Just a place where you can connect with me!
+      - FOOTER=Thanks for stopping by!
+      - BUTTON_ORDER=LINKED_IN,YOUTUBE,TWITCH,TWITTER,GITHUB,INSTAGRAM,DISCORD,FACEBOOK,TIKTOK,KIT,PATREON
+      - LINKED_IN=https://www.linkedin.com/in/blake-renton
+      - GITHUB=https://github.com/elblayko
+      - CUSTOM_BUTTON_TEXT=Service Status
+      - CUSTOM_BUTTON_URL=https://status.blakerenton.net
+      - CUSTOM_BUTTON_COLOR=#ED2756
+      - CUSTOM_BUTTON_TEXT_COLOR=#ffffff
+      - CUSTOM_BUTTON_ALT_TEXT=Service Status
+      - CUSTOM_BUTTON_NAME=HOMEPAGE
+      - CUSTOM_BUTTON_ICON=fas link
+      - BUTTON_TARGET=_blank # controls the button target html attribute
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+    # Expose to Traefik.
+    - traefik.enable=true
+
+    # Configure HTTP endpoint, redirect to HTTPS.
+    - traefik.http.routers.littlelink.entrypoints=http
+    - traefik.http.routers.littlelink.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    - traefik.http.routers.littlelink.middlewares=littlelink-https
+    - traefik.http.middlewares.littlelink-https.redirectscheme.scheme=https
+
+    # Configure HTTPS endpoint.
+    - traefik.http.routers.littlelink-https.entrypoints=https
+    - traefik.http.routers.littlelink-https.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    - traefik.http.routers.littlelink-https.tls=true
+    - traefik.http.routers.littlelink-https.tls.certResolver=cloudflare
