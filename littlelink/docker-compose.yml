@@ -8,6 +8,8 @@ services:
   littlelink:
     image: ghcr.io/techno-tim/littlelink-server:latest
     container_name: littlelink
+    networks:
+      web:
     environment:
       - META_TITLE=Blake Renton
       - META_DESCRIPTION=Blake Renton Link page
