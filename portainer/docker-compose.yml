@@ -5,7 +5,8 @@ networks:
     external: true
 
 volumes:
-  portainer_data:
+  portainer:
+    name: portainer_data
     driver: local
 
 services:
