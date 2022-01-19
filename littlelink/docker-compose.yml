@@ -27,13 +27,13 @@ services:
       - BUTTON_ORDER=LINKED_IN,YOUTUBE,TWITCH,TWITTER,GITHUB,INSTAGRAM,DISCORD,FACEBOOK,TIKTOK,KIT,PATREON
       - LINKED_IN=https://www.linkedin.com/in/blake-renton
       - GITHUB=https://github.com/elblayko
-      - CUSTOM_BUTTON_TEXT=Service Status
-      - CUSTOM_BUTTON_URL=https://status.blakerenton.net
-      - CUSTOM_BUTTON_COLOR=#ED2756
-      - CUSTOM_BUTTON_TEXT_COLOR=#ffffff
-      - CUSTOM_BUTTON_ALT_TEXT=Service Status
-      - CUSTOM_BUTTON_NAME=HOMEPAGE
-      - CUSTOM_BUTTON_ICON=fas link
+      - CUSTOM_BUTTON_TEXT=Blog,Service Status
+      - CUSTOM_BUTTON_URL=https://blog.blakerenton.net,https://status.blakerenton.net
+      - CUSTOM_BUTTON_COLOR=#ED2756,#0085FF
+      - CUSTOM_BUTTON_TEXT_COLOR=#ffffff,#ffffff
+      - CUSTOM_BUTTON_ALT_TEXT=Blog,Service Status
+      - CUSTOM_BUTTON_NAME=BLOG,SERVICESTATUS
+      - CUSTOM_BUTTON_ICON=fab wordpress,fas heartbeat
       - BUTTON_TARGET=_blank # controls the button target html attribute
     restart: unless-stopped
     security_opt:
