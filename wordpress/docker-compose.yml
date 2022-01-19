@@ -2,10 +2,10 @@ version: '3.9'
 
 volumes:
   wordpress:
-    name: wordpress
+    name: wordpress_data
     driver: local
   mariadb:
-    name: mariadb
+    name: mariadb_data
     driver: local
 
 networks:
