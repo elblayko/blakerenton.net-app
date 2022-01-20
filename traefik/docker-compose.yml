@@ -21,10 +21,6 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock:ro
     - ./acme.json:/acme.json
     command:
-      # Use the Traefik dashboard service.
-      - --api.dashboard=true
-      - --api.debug=true
-
       # Traefik Providers
       - --providers.docker=true
       - --providers.docker.endpoint=unix:///var/run/docker.sock
