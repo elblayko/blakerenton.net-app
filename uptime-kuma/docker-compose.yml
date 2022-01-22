@@ -18,6 +18,8 @@ services:
       web:
     volumes:
     - uptime-kuma:/app/data
+    security_opt:
+    - no-new-privileges:true
     labels:
     # Expose to Traefik.
     - traefik.enable=true

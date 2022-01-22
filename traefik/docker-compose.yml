@@ -20,6 +20,8 @@ services:
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock:ro
     - ./acme.json:/acme.json
+    security_opt:
+    - no-new-privileges:true
     command:
       # Traefik Providers
       - --providers.docker=true

@@ -18,6 +18,8 @@ services:
       web:
     volumes:
     - wordpress:/var/www/html
+    security_opt:
+    - no-new-privileges:true
     environment:
     - WORDPRESS_DB_HOST 
     - WORDPRESS_DB_USER

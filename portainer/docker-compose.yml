@@ -19,6 +19,8 @@ services:
     volumes:
     - portainer_data:/data
     - /var/run/docker.sock:/var/run/docker.sock:ro
+    security_opt:
+    - no-new-privileges:true
     labels:
     - traefik.enable=true
 
