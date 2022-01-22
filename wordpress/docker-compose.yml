@@ -4,9 +4,6 @@ volumes:
   wordpress:
     name: wordpress_data
     driver: local
-  mariadb:
-    name: mariadb_data
-    driver: local
 
 networks:
   web:
@@ -27,8 +24,6 @@ services:
     - WORDPRESS_DB_PASSWORD
     - WORDPRESS_DB_NAME
     - WORDPRESS_TABLE_PREFIX
-    depends_on:
-    - mariadb
     labels:
     # Expose to Traefik.
     - traefik.enable=true
@@ -45,16 +40,3 @@ services:
     - traefik.http.routers.wordpress-https.tls=true
     - traefik.http.routers.wordpress-https.tls.certResolver=cloudflare
 
-  mariadb:
-    image: mariadb:10.7.1-focal
-    container_name: mariadb
-    restart: unless-stopped
-    networks:
-      web:
-    volumes:
-    - mariadb:/var/lib/mysql
-    environment:
-    - MARIADB_ROOT_PASSWORD
-    - MARIADB_DATABASE
-    - MARIADB_USER
-    - MARIADB_PASSWORD
