@@ -5,9 +5,8 @@ networks:
     external: true
 
 services:
-  littlelink:
+  home:
     image: ghcr.io/techno-tim/littlelink-server:latest
-    container_name: littlelink
     networks:
       proxy:
     environment:
