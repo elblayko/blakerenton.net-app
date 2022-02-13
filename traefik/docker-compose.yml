@@ -3,6 +3,7 @@ version: '3.9'
 networks:
   proxy:
     driver: bridge
+    name: proxy
 
 services:
   traefik:
