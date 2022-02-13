@@ -6,7 +6,7 @@ volumes:
     driver: local
 
 networks:
-  web:
+  proxy:
     external: true
 
 services:
@@ -15,7 +15,7 @@ services:
     container_name: uptime-kuma
     restart: unless-stopped
     networks:
-      web:
+      proxy:
     volumes:
     - uptime-kuma:/app/data
     security_opt:
