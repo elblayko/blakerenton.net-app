@@ -1,11 +1,15 @@
 The proxy service automatically tracks the expiry date of ACME certificates it generates.  If there are less than 30 days remaining before the certificate expires, Traefik will attempt to renew it automatically.  Configuration for other DNS providers can be found at https://doc.traefik.io/traefik/https/acme/#dnschallenge
 
-`traefik/.env` or in-line:
+
+## Configure secrets:
+
+`traefik/.env`, `.bashrc/.zshrc`, or in-line:
 ```
 CF_API_EMAIL=mail@domain.com
 CF_API_KEY=cloudflare-api-key
 ```
 
+If using .env:
 ```
 chmod 600 .env
 ```
