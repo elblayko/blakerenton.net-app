@@ -26,13 +26,6 @@ services:
       - BUTTON_ORDER=LINKED_IN,YOUTUBE,TWITCH,TWITTER,GITHUB,INSTAGRAM,DISCORD,FACEBOOK,TIKTOK,KIT,PATREON
       - LINKED_IN=https://www.linkedin.com/in/blake-renton
       - GITHUB=https://github.com/elblayko
-      - CUSTOM_BUTTON_TEXT=Service Status
-      - CUSTOM_BUTTON_URL=https://status.blakerenton.net
-      - CUSTOM_BUTTON_COLOR=#0085FF
-      - CUSTOM_BUTTON_TEXT_COLOR=#ffffff
-      - CUSTOM_BUTTON_ALT_TEXT=Service Status
-      - CUSTOM_BUTTON_NAME=SERVICESTATUS
-      - CUSTOM_BUTTON_ICON=fas heartbeat
       - BUTTON_TARGET=_blank # controls the button target html attribute
     restart: unless-stopped
     security_opt:
