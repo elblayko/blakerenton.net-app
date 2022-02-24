@@ -34,14 +34,26 @@ services:
     # Expose to Traefik.
     - traefik.enable=true
 
-    # Configure HTTP endpoint, redirect to HTTPS.
+    # Configure HTTP endpoint
     - traefik.http.routers.littlelink.entrypoints=http
     - traefik.http.routers.littlelink.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+
+    # Configure HTTPS endpoint
+    - traefik.http.routers.littlelink-https.entrypoints=https
+    - traefik.http.routers.littlelink-https.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+
+    # HTTPS Redirect
     - traefik.http.routers.littlelink.middlewares=littlelink-https
     - traefik.http.middlewares.littlelink-https.redirectscheme.scheme=https
 
-    # Configure HTTPS endpoint.
-    - traefik.http.routers.littlelink-https.entrypoints=https
-    - traefik.http.routers.littlelink-https.rule=Host(`www.blakerenton.net`) || Host(`blakerenton.net`)
+    # TLS Cert Resolver
     - traefik.http.routers.littlelink-https.tls=true
     - traefik.http.routers.littlelink-https.tls.certResolver=cloudflare
+
+    # Rate Limit
+    - traefik.http.middlewares.littlelink-rate.ratelimit.average=100
+    - traefik.http.middlewares.littlelink-rate.ratelimit.burst=50
+    - traefik.http.middlewares.littlelink-rate.ratelimit.period=1m
+    - traefik.http.middlewares.littlelink-rate.ratelimit.sourcecriterion.requestheadername=Cf-Connecting-Ip
+    - traefik.http.routers.littlelink.middlewares=littlelink-rate
+    - traefik.http.routers.littlelink-https.middlewares=littlelink-rate
