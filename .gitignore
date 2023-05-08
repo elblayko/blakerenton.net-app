@@ -1,2 +1,2 @@
-.env
 acme.json
+conf/traefik.env

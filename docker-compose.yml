@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  traefik:
+    image: traefik:v2.10.1
+    env_file: ./conf/traefik.env
+    networks:
+      - web
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./conf/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./acme.json:/etc/traefik/acme.json
+
+  home:
+    image: ghcr.io/techno-tim/littlelink-server:latest
+    env_file: ./conf/home.env
+    networks:
+      - web
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.home.entrypoints=http"
+      - "traefik.http.routers.home.middlewares=http-rate-limit,redirect-to-https"
+      - "traefik.http.routers.home.rule=Host(`blakerenton.net`) || Host(`www.blakerenton.net`)"
+
+      - "traefik.http.routers.home-secure.entrypoints=https"
+      - "traefik.http.routers.home-secure.middlewares=http-rate-limit,root-to-www"
+      - "traefik.http.routers.home-secure.rule=Host(`blakerenton.net`) || Host(`www.blakerenton.net`)"
+      - "traefik.http.routers.home-secure.tls=true"
+      - "traefik.http.routers.home-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.home-secure.tls.domains[0].main=blakerenton.net"
+      - "traefik.http.routers.home-secure.tls.domains[0].sans=*.blakerenton.net"
+
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.http-rate-limit.ratelimit.average=100"
+      - "traefik.http.middlewares.http-rate-limit.ratelimit.burst=100"
+      - "traefik.http.middlewares.http-rate-limit.ratelimit.period=1s"
+      - "traefik.http.middlewares.http-rate-limit.ratelimit.sourcecriterion.requestHeaderName=Cf-Connecting-Ip"
+      - "traefik.http.middlewares.root-to-www.redirectregex.regex=^https?://(blakerenton.net|www.blakerenton.net)(/.*)?$"
+      - "traefik.http.middlewares.root-to-www.redirectregex.replacement=https://www.blakerenton.net$${2}"
+      - "traefik.http.middlewares.root-to-www.redirectregex.permanent=true"
+networks:
+  web:
