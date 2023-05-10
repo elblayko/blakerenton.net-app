@@ -1,0 +1,38 @@
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+
+# api:
+#   dashboard: true
+#   insecure: true
+#   debug: true
+
+serversTransport:
+  insecureSkipVerify: true
+
+log:
+  level: DEBUG
+  filePath: "/traefik.log"
+  format: "common"
+
+accessLog:
+  filePath: "/access.log"
+  format: "common"
+
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: "${CLOUDFLARE_EMAIL}"
+      storage: /etc/traefik/acme.json
+      # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - 1.1.1.1:53
+          - 1.0.0.1:53
